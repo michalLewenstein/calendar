@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <button onclick="print()">Try It</button>
+    <button onclick="Delete()">Delete Me</button>
+    <button onclick="update()">Update Me</button>
+    <button onclick="Post()">Post Me</button>
+
+    <meta charset='utf-8' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            axios.get(`https://eventsapi.onrender.com/api/Events`).then((res) => {
+                var calendarEl = document.getElementById("calendar");
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: "dayGridMonth",
+                    events: res.data,
+                });
+                calendar.render();
+            });
+        });
+    </script>
+
+    <script>
+        function Delete() {
+            const id = prompt("enter id: ")
+            
+
+            axios.delete(`https://eventsapi.onrender.com/api/Events/${id}`).then((res) => {
+                var calendarEl = document.getElementById("calendar");
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: "dayGridMonth",
+                    events: res.data,
+                });
+                axios.get(`https://eventsapi.onrender.com/api/Events`).then((res) => {
+                var calendarEl = document.getElementById("calendar");
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: "dayGridMonth",
+                    events: res.data,
+                });
+                calendar.render();
+            });
+            });
+
+        }
+    </script>
+
+    <script>
+        function update() {
+            const id = prompt("enter id: ")
+            const title = prompt("enter title: ")
+            const start = prompt("enter start: ")
+
+            axios.put(`https://eventsapi.onrender.com/api/Events/${id}`, {
+                "title": title,
+                "start": start
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            alert("yesssssssss updateeee")
+            axios.get(`https://eventsapi.onrender.com/api/Events`).then((res) => {
+                var calendarEl = document.getElementById("calendar");
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: "dayGridMonth",
+                    events: res.data,
+                });
+                calendar.render();
+        });
+    }
+    </script>
+
+    <script>
+        function Post() {
+
+            const title = prompt("enter title: ")
+            const start = prompt("enter start: ")
+
+            axios.post('https://eventsapi.onrender.com/api/Events', {
+                "title": title,
+                "start": start
+
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            alert("yessssssssssss posttttt")
+        
+                   axios.get(`https://eventsapi.onrender.com/api/Events`).then((res) => {
+                var calendarEl = document.getElementById("calendar");
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: "dayGridMonth",
+                    events: res.data,
+                });
+                calendar.render();
+            });}
+    </script>
+
+    <script>
+
+        function print() {
+            alert("good!!")
+        }
+
+
+
+
+    </script>
+
+</head>
+<body>
+    <div id='calendar'></div>
+</body>
+
+</html>
